@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,6 +44,16 @@ public class ListaAlunosActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        Button botaoAdiciona = (Button) findViewById(R.id.lista_alunos_floating_button);
+        if (botaoAdiciona != null) {
+            botaoAdiciona.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(ListaAlunosActivity.this, "Floating button clicado", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
     }
 }
