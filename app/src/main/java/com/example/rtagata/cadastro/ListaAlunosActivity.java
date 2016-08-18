@@ -2,8 +2,11 @@ package com.example.rtagata.cadastro;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ListaAlunosActivity extends AppCompatActivity {
 
@@ -17,7 +20,29 @@ public class ListaAlunosActivity extends AppCompatActivity {
         String[] alunos = {"Auei", "Buiei", "Cuei"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
         listaAlunos = (ListView) findViewById(R.id.lista_alunos);
-        listaAlunos.setAdapter(adapter);
+        if (listaAlunos != null) {
+            listaAlunos.setAdapter(adapter);
+        }
+
+        //CLICK NORMAL no NOME
+        listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int posicao, long id) {
+                Toast.makeText(ListaAlunosActivity.this, "Posição selecionada: " + posicao, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        //CLICK LONGO
+        listaAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapter, View view, int posicao, long id) {
+
+                String aluno = (String) adapter.getItemAtPosition(posicao);
+                Toast.makeText(ListaAlunosActivity.this, "Clique longo: " + aluno, Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
 
     }
 }
