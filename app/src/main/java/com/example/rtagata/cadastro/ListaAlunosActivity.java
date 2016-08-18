@@ -1,5 +1,6 @@
 package com.example.rtagata.cadastro;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -50,7 +51,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
             botaoAdiciona.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(ListaAlunosActivity.this, "Floating button clicado", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(ListaAlunosActivity.this, FormularioActivity.class);
+                    startActivity(intent);
                 }
             });
         }
