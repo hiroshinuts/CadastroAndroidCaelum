@@ -21,7 +21,7 @@ public class FormularioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
 
-        Button botao = (Button) findViewById(R.id.lista_alunos_floating_button);
+        Button botao = (Button) findViewById(R.id.menu_formulario_ok);
 
 
         Intent intent = getIntent();
@@ -46,6 +46,7 @@ public class FormularioActivity extends AppCompatActivity {
                 AlunoDAO dao = new AlunoDAO(FormularioActivity.this);
                 dao.insere(aluno);
                 dao.close();
+                finish();
                 return false;
             default:
                 return super.onOptionsItemSelected(item);
