@@ -10,23 +10,31 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.rtagata.cadastro.dao.AlunoDAO;
+import com.example.rtagata.cadastro.extras.Extras;
 import com.example.rtagata.cadastro.modelo.Aluno;
 
 public class FormularioActivity extends AppCompatActivity {
 
     private FormularioHelper helper;
+    public static final String ALUNO_SELECIONADO = "alunoSelecionado";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
 
-        Button botao = (Button) findViewById(R.id.menu_formulario_ok);
+
 
 
         Intent intent = getIntent();
+        final Aluno alunoParaSerAlterado = (Aluno) intent.getSerializableExtra(Extras.ALUNO_SELECIONADO);
 
         this.helper = new FormularioHelper(this);
+
+        Button botao = (Button) findViewById(R.id.menu_formulario_ok);
+        if(alunoParaSerAlterado != null){
+            helper.colocaNoFormulario(alunoParaSerAlterado);
+        }
 
 
     }
@@ -44,7 +52,11 @@ public class FormularioActivity extends AppCompatActivity {
             case R.id.menu_formulario_ok:
                 Aluno aluno = helper.pegaAlunoDoFormulario();
                 AlunoDAO dao = new AlunoDAO(FormularioActivity.this);
-                dao.insere(aluno);
+                if(aluno.getId() == null){
+                    dao.insere(aluno);
+                }else{
+                    dao.altera(aluno);
+                }
                 dao.close();
                 finish();
                 return false;
