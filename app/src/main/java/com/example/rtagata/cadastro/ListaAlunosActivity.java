@@ -1,8 +1,12 @@
 package com.example.rtagata.cadastro;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -64,7 +68,48 @@ public class ListaAlunosActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
         }
+
+        //AVISANDO ONCREATE Q A LISTA TEM CONTEXTMENU
+        registerForContextMenu(listaAlunos);
+
+
+    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        final Aluno alunoSelecionado = (Aluno) listaAlunos.getAdapter().getItem(info.position);
+
+        menu.add("Ligar");
+        menu.add("Enviar SMS");
+        menu.add("Achar no Mapa");
+        menu.add("Navegar no site");
+
+        MenuItem deletar = menu.add("Deletar");
+        deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                new AlertDialog.Builder(ListaAlunosActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Deletar")
+                        .setMessage("Deseja Mesmo Deletar ?")
+                        .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AlunoDAO dao = new AlunoDAO(ListaAlunosActivity.this);
+                                dao.deletar(alunoSelecionado);
+                                dao.close();
+                                carregaLista();
+                            }
+                        }).setNegativeButton("Nao", null).show();
+                return false;
+            }
+        });
 
     }
 
