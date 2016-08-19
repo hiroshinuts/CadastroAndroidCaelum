@@ -10,17 +10,26 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.rtagata.cadastro.dao.AlunoDAO;
+import com.example.rtagata.cadastro.modelo.Aluno;
+
+import java.util.List;
+
 public class ListaAlunosActivity extends AppCompatActivity {
 
     private ListView listaAlunos;
+    private List<Aluno> alunos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_alunos);
 
-        String[] alunos = {"Auei", "Buiei", "Cuei"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
+
+        AlunoDAO dao = new AlunoDAO(this);
+        alunos = dao.getLista();
+        dao.close();
+        ArrayAdapter<Aluno> adapter = new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
         listaAlunos = (ListView) findViewById(R.id.lista_alunos);
         if (listaAlunos != null) {
             listaAlunos.setAdapter(adapter);
@@ -39,7 +48,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapter, View view, int posicao, long id) {
 
-                String aluno = (String) adapter.getItemAtPosition(posicao);
+                Aluno aluno = (Aluno) adapter.getItemAtPosition(posicao);
                 Toast.makeText(ListaAlunosActivity.this, "Clique longo: " + aluno, Toast.LENGTH_SHORT).show();
 
                 return false;
@@ -57,5 +66,20 @@ public class ListaAlunosActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.carregaLista();
+    }
+
+    private void carregaLista() {
+        AlunoDAO dao = new AlunoDAO(this);
+        List<Aluno> alunos = dao.getLista();
+        dao.close();
+
+        ArrayAdapter<Aluno> adapter = new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
+        this.listaAlunos.setAdapter(adapter);
     }
 }
