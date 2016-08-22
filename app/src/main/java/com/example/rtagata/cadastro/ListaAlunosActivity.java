@@ -2,6 +2,7 @@ package com.example.rtagata.cadastro;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,10 +91,30 @@ public class ListaAlunosActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         final Aluno alunoSelecionado = (Aluno) listaAlunos.getAdapter().getItem(info.position);
 
-        menu.add("Ligar");
-        menu.add("Enviar SMS");
-        menu.add("Achar no Mapa");
-        menu.add("Navegar no site");
+        MenuItem ligar = menu.add("Ligar");
+        Intent intentLigar = new Intent(Intent.ACTION_CALL);
+        intentLigar.setData(Uri.parse("tel: " + alunoSelecionado.getTelefone()));
+        ligar.setIntent(intentLigar);
+
+        MenuItem sms = menu.add("Enviar SMS");
+        Intent intentSms = new Intent(Intent.ACTION_VIEW);
+        intentSms.setData(Uri.parse("sms: " + alunoSelecionado.getTelefone()));
+        sms.setIntent(intentSms);
+
+        MenuItem acharNoMapa =  menu.add("Achar no Mapa");
+        Intent intentMapa  = new Intent(Intent.ACTION_VIEW);
+        String endereco = alunoSelecionado.getEndereco();
+        intentMapa.setData(Uri.parse("geo: 0,0?z=14&q=" + Uri.encode(endereco)));
+        acharNoMapa.setIntent(intentMapa);
+
+        MenuItem site = menu.add("Navegar no site");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        String siteString = alunoSelecionado.getSite();
+        if(!siteString.startsWith("http://")){
+            siteString = "http:// " + siteString;
+        }
+        intent.setData(Uri.parse("http: " + alunoSelecionado.getSite()));
+        site.setIntent(intent);
 
         MenuItem deletar = menu.add("Deletar");
         deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
