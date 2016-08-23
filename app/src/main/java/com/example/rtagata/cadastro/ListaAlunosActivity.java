@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.rtagata.cadastro.adapter.ListaAlunosAdapter;
 import com.example.rtagata.cadastro.dao.AlunoDAO;
 import com.example.rtagata.cadastro.extras.Extras;
 import com.example.rtagata.cadastro.modelo.Aluno;
@@ -31,10 +32,10 @@ public class ListaAlunosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_alunos);
 
-              AlunoDAO dao = new AlunoDAO(this);
+        AlunoDAO dao = new AlunoDAO(this);
         alunos = dao.getLista();
         dao.close();
-        ArrayAdapter<Aluno> adapter = new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
+        ListaAlunosAdapter adapter = new ListaAlunosAdapter(this, alunos);
         listaAlunos = (ListView) findViewById(R.id.lista_alunos);
         if (listaAlunos != null) {
             listaAlunos.setAdapter(adapter);
